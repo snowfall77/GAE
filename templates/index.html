@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="EN">
+    <head>
+	<link rel="stylesheet" href="/media/css/style.css" type="text/css" media="screen, print" title="no title" charset="utf-8" />
+        <script type="text/javascript" src="/media/js/jquery-1.8.2.min.js"></script>
+	<script type="text/javascript">
+	    $(function() {
+		$.ajaxSetup ({
+		    cache: false
+		});
+                $("#update_btn, #create_btn").click( function() {
+		   var username = $("#username").attr('value');
+		   $("#current_username").text(username);
+		   $.ajax({
+                       url:"/update_username?username=" + username + "&nickname=" + "{{ nickname }}",
+                       type:'GET',
+		       success: function(data) {
+                           if (data != 'None') {
+			       $("#old_username").text("(previous username: " + data + ")");
+			   }
+		       }
+		   });
+		});
+	    });
+	</script>
+    </head>
+    <body>
+        Welcome!
+        {% if username %}
+            <span id="current_username">{{ username }}</span>
+	    <span id="old_username">
+	    {% if prev_username %}
+	        (previous username: {{ prev_username }})
+	    {% endif %}
+            </span>
+	    <hr/>
+            User name: <input type=text id="username" value=''><input type=button id='update_btn' value='Update'>
+        {% else %}
+            <span id="current_username">{{ nickname }}</span> <span id="old_username"></span>
+	    <hr/>
+            User name: <input type=text id="username" value=''><input type=button id="create_btn" value='Create'>
+        {% endif %}
+    </body>
+</html>
+
